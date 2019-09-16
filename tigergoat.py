@@ -1,7 +1,7 @@
 #!/usr/bin/python
- 
+import printboard as pb
 import sys
- 
+num_states=10
 baseNodeConnectB1 = {
         0 : [1, 2, 3],
         1 : [0, 2, 4],
@@ -84,29 +84,13 @@ boardID = 0
 goatAvail = 5
 goatsAlive = 5
  
-gameState = [' '] * 10
+gameState = [' '] * num_states
 gameState[0] = 'T'
 tigerPos = [0]
 goatPos = [-1] * goatAvail
  
 baseNodeConnect = baseNodeConnectB1
 jumpNodeConnect = jumpNodeConnectB1
- 
-def printBoard():
-    if boardID == 0:
-        print ('          '+"   | "+gameState[0]+'_0'+" | ")
-        print ('---------------------------------')
-        print ('      '+gameState[1]+'_1'+"   / "+gameState[2]+'_2'+"   \   "+gameState[3]+'_3')
-        print ('---------------------------------')
-        print ("    "+gameState[4]+'_4'+"    /  "+gameState[5]+'_5'+"    \   "+gameState[6]+'_6'+"        ")
-        print ('---------------------------------')
-        print ("  "+gameState[7]+'_7'+"     /   "+gameState[8]+'_8'+"     \   "+gameState[9]+'_9'+"            ")
-        print ('---------------------------------')
-        print (tigerPos)
-        print (goatPos)
-    else:
-        #TODO: add display for other boards
-        print('add display for other boards')
  
 def isPosValid(posStr, animal):
     try:
@@ -215,7 +199,7 @@ def isGameOver():
                 return False
     return True
  
-def pulimekha():
+def pulimekha(board):
     """
     Tiger - Goat :-
  
@@ -284,16 +268,21 @@ def pulimekha():
         baseNodeConnect = baseNodeConnectB2
         jumpNodeConnect = jumpNodeConnectB2
     while(isGameOver() == False):
-        printBoard()
+        print(board.format(*gameState))
         goatToMove()
         if isGameOver():
             print ('GOATS WON')
             break
-        printBoard()
+        print(board.format(*gameState))
         tigerToMove()
         if goatsAlive < 4:
             print ('TIGER(s) WON')
             break
  
 if __name__ == '__main__':
-    pulimekha()
+    board=pb.create_board(num_states)
+    if board=="":
+        print("please num place as 3*n+1\n")
+        exit(0)
+    else:
+        pulimekha(board)
